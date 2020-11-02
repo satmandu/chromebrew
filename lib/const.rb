@@ -17,7 +17,7 @@ else
   CREW_PREFIX_ACTUAL = ENV['CREW_PREFIX']
   CREW_PREFIX = '/usr/local'
   ENV['PATH'] = "#{CREW_PREFIX_ACTUAL}/bin:#{CREW_PREFIX_ACTUAL}/sbin:/usr/bin:/bin:/opt/bin"
-  ENV['MANPATH'] = "#{CREW_PREFIX_ACTUAL}/share/man:/usr/share/man
+  ENV['MANPATH'] = "#{CREW_PREFIX_ACTUAL}/share/man:/usr/share/man"
   if @pkgName
     @pkg.build_from_source = true
   end
