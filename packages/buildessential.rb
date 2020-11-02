@@ -15,7 +15,7 @@ class Buildessential < Package
   depends_on 'pkgconfig'
 
   # install man pages
-  depends_on 'manpages'
+  # depends_on 'manpages'
 
   # compress man pages
   depends_on 'compressdoc'
