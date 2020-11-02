@@ -115,7 +115,6 @@ class Package
     # See lib/const.rb for more details
 
     if @in_build == true
-      CREW_PREFIX_SAVE = CREW_PREFIX
       CREW_PREFIX.replace = '/usrlocal'
       nproc = ''
       nproc_opt =  ''
