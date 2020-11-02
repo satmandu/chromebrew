@@ -650,7 +650,7 @@ def strip_find_files (find_cmd, strip_option = "")
 end
 
   NOSLASH_CREW_PREFIX = CREW_PREFIX.delete_prefix '/'
-  TAR_ALT_PREFIX = if CREW_PREFIX != '/usr/local' then "--transform=s*usr/local*#{NOSLASH_CREW_PREFIX}* else '' end
+  TAR_ALT_PREFIX = if CREW_PREFIX != '/usr/local' then "--transform=s*usr/local*#{NOSLASH_CREW_PREFIX}*" else '' end
 
 def install_package (pkgdir)
   Dir.chdir pkgdir do
