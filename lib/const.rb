@@ -19,6 +19,8 @@ else
     @pkg.build_from_source = true
   end
 end
+NOSLASH_CREW_PREFIX = CREW_PREFIX
+NOSLASH_CREW_PREFIX = NOSLASH_CREW_PREFIX.delete_prefix "/"
 CREW_LIB_PREFIX = CREW_PREFIX + '/' + ARCH_LIB
 ENV['LD_LIBRARY_PATH'] = "#{CREW_LIB_PREFIX}"
 CREW_MAN_PREFIX = CREW_PREFIX + '/share/man'
