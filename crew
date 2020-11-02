@@ -682,7 +682,6 @@ done
 EOF"
         system "chmod +x ./fixsymlinks"
         puts "fixing symlinks"
-        system "cat ./fixsymlinks"
         system "CREW_PREFIX=#{CREW_PREFIX} ./fixsymlinks"
     end
     if @opt_verbose then
