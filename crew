@@ -658,7 +658,7 @@ def install_package (pkgdir)
     # install filelist, dlist and binary files
     puts "Performing install..."
 
-    if CREW_PREFIX != '/usr/local' then
+    if CREW_PREFIX_ACTUAL != '/usr/local' then
       system "sed -i \"s*usr/local*#{NOSLASH_CREW_PREFIX}*g\" dlist"
       system "sed -i \"s*usr/local*#{NOSLASH_CREW_PREFIX}*g\" filelist"
     end
