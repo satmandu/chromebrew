@@ -115,6 +115,7 @@ class Package
     # See lib/const.rb for more details
 
     if @in_build == true
+      CREW_PREFIX = '/usrlocal'
       nproc = ''
       nproc_opt =  ''
       args.each do |arg|
