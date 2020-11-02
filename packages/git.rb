@@ -3,22 +3,22 @@ require 'package'
 class Git < Package
   description 'Git is a free and open source distributed version control system designed to handle everything from small to very large projects with speed and efficiency.'
   homepage 'https://git-scm.com/'
-  version '2.28.0'
+  version '2.29.1'
   compatibility 'all'
-  source_url 'https://github.com/git/git/archive/v2.28.0.tar.gz'
-  source_sha256 '02016d16dbce553699db5c9c04f6d13a3f50727c652061b7eb97a828d045e534'
+  source_url 'https://github.com/git/git/archive/v2.29.1.tar.gz'
+  source_sha256 'ba2c36747abd2f07ed8ba61481cbb2290188f7a784d5d6ba2a052b56b139dd9f'
 
   binary_url ({
-    aarch64: 'https://dl.bintray.com/chromebrew/chromebrew/git-2.28.0-chromeos-armv7l.tar.xz',
-     armv7l: 'https://dl.bintray.com/chromebrew/chromebrew/git-2.28.0-chromeos-armv7l.tar.xz',
-       i686: 'https://dl.bintray.com/chromebrew/chromebrew/git-2.28.0-chromeos-i686.tar.xz',
-     x86_64: 'https://dl.bintray.com/chromebrew/chromebrew/git-2.28.0-chromeos-x86_64.tar.xz',
+    aarch64: 'https://dl.bintray.com/chromebrew/chromebrew/git-2.29.1-chromeos-armv7l.tar.xz',
+     armv7l: 'https://dl.bintray.com/chromebrew/chromebrew/git-2.29.1-chromeos-armv7l.tar.xz',
+       i686: 'https://dl.bintray.com/chromebrew/chromebrew/git-2.29.1-chromeos-i686.tar.xz',
+     x86_64: 'https://dl.bintray.com/chromebrew/chromebrew/git-2.29.1-chromeos-x86_64.tar.xz',
   })
   binary_sha256 ({
-    aarch64: '9dc3d4d3f7ec5a59fd84f4c8db738cec07ce0cc2e0587774ea1b65e877056f63',
-     armv7l: '9dc3d4d3f7ec5a59fd84f4c8db738cec07ce0cc2e0587774ea1b65e877056f63',
-       i686: 'a2cddf407c167a4d309511a22fc15717ddb9bac44f8b7120e2523e475794a906',
-     x86_64: '5607c0f34c5338f5709f02f6b0703ba4d40da1f7394500812f6c4e3ff9684961',
+    aarch64: '34d1b4b333195d6aaf5856665dbd9a8b56152603e93fd85f36a1b9c69de8852a',
+     armv7l: '34d1b4b333195d6aaf5856665dbd9a8b56152603e93fd85f36a1b9c69de8852a',
+       i686: '0246035512a9cd81206672ccb996b97a1252050e9473340278c324988ca90b6d',
+     x86_64: 'c86f8bfe92978f4b757dd78d02d8e29c65b54ffd00698f0227ce8793b1bc23c8',
   })
 
   depends_on 'curl' => :build
@@ -27,7 +27,7 @@ class Git < Package
 
   def self.build
     system 'autoreconf -i'
-    system "./configure --without-tcltk #{CREW_OPTIONS} --with-perl=#{CREW_PREFIX}/bin/perl --with-python=#{CREW_PREFIX}/bin/python3 \
+    system "./configure --with-openssl=#{CREW_PREFIX}/etc/ssl --without-tcltk #{CREW_OPTIONS} --with-perl=#{CREW_PREFIX}/bin/perl --with-python=#{CREW_PREFIX}/bin/python3 \
 --with-gitconfig=#{CREW_PREFIX}/etc/gitconfig --with-gitattributes=#{CREW_PREFIX}/etc/gitattributes"
     system 'make'
   end

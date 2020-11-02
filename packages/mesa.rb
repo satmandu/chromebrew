@@ -3,59 +3,56 @@ require 'package'
 class Mesa < Package
   description 'Open-source implementation of the OpenGL specification'
   homepage 'https://www.mesa3d.org'
-  version '20.0.2'
+  version '20.2.1-3'
   compatibility 'all'
-  source_url 'https://mesa.freedesktop.org/archive/mesa-20.0.2.tar.xz'
-  source_sha256 'aa54f1cb669550606aab8ceb475105d15aeb814fca5a778ce70d0fd10e98e86f'
+  source_url 'https://mesa.freedesktop.org/archive/mesa-20.2.1.tar.xz'
+  source_sha256 'd1a46d9a3f291bc0e0374600bdcb59844fa3eafaa50398e472a36fc65fd0244a'
 
   binary_url ({
-    aarch64: 'https://dl.bintray.com/chromebrew/chromebrew/mesa-20.0.2-chromeos-armv7l.tar.xz',
-     armv7l: 'https://dl.bintray.com/chromebrew/chromebrew/mesa-20.0.2-chromeos-armv7l.tar.xz',
-       i686: 'https://dl.bintray.com/chromebrew/chromebrew/mesa-20.0.2-chromeos-i686.tar.xz',
-     x86_64: 'https://dl.bintray.com/chromebrew/chromebrew/mesa-20.0.2-chromeos-x86_64.tar.xz',
+    aarch64: 'https://dl.bintray.com/chromebrew/chromebrew/mesa-20.2.1-3-chromeos-armv7l.tar.xz',
+     armv7l: 'https://dl.bintray.com/chromebrew/chromebrew/mesa-20.2.1-3-chromeos-armv7l.tar.xz',
+       i686: 'https://dl.bintray.com/chromebrew/chromebrew/mesa-20.2.1-3-chromeos-i686.tar.xz',
+     x86_64: 'https://dl.bintray.com/chromebrew/chromebrew/mesa-20.2.1-3-chromeos-x86_64.tar.xz',
   })
   binary_sha256 ({
-    aarch64: '1032dfef942c6fba1862daf15e2f9a3f6221d68b125e11cba953f27393059004',
-     armv7l: '1032dfef942c6fba1862daf15e2f9a3f6221d68b125e11cba953f27393059004',
-       i686: 'd59403d96e51bd16af361792732e6065b58b56b71ae621884f47d30f3e2a4a1c',
-     x86_64: 'f7017c11eb0671f0ca9d0368e7c03d7668673c824af96f6238f183e72b033202',
+    aarch64: '0f7bcaa417dc03c46a1d3e7a6abcb6a0d473448b18addc7a0478e0f16a7d37e7',
+     armv7l: '0f7bcaa417dc03c46a1d3e7a6abcb6a0d473448b18addc7a0478e0f16a7d37e7',
+       i686: '3a0ad01ba8d89930d45a935939c97edf4dd195827179aabfe1126abd9df6de77',
+     x86_64: 'a34d88508b68fedd172c30e13a021b9b5c95308a9864507173818452ea75ee5e',
   })
 
-  depends_on 'setuptools' => :build
-  depends_on 'libva'
-  depends_on 'libvdpau'
-  depends_on 'wayland_protocols'
+  depends_on 'llvm' => :build
   depends_on 'elfutils'
-  depends_on 'llvm'
+  depends_on 'glslang'
+  depends_on 'libdrm'
+  depends_on 'libomxil_bellagio'
+  depends_on 'libunwind'
+  depends_on 'libvdpau'
+  depends_on 'libxdamage'
+  depends_on 'libxshmfence'
+  depends_on 'libxv'
+  depends_on 'libxvmc'
+  depends_on 'libxxf86vm'
+  depends_on 'valgrind'
+  depends_on 'vulkan_headers' => :build
+  depends_on 'vulkan_icd_loader'
+  depends_on 'wayland_protocols'
+  depends_on 'zstd'
 
   def self.build
     system "pip3 uninstall -y Mako MarkupSafe || :"
     system "pip3 install --prefix \"#{CREW_PREFIX}\" --root \"#{CREW_DEST_DIR}\" Mako"
     system "pip3 install --prefix \"#{CREW_PREFIX}\" Mako"
-    system "meson",
-      "--prefix=#{CREW_PREFIX}",
-      "--libdir=#{CREW_LIB_PREFIX}",
-      "-Dshared-glapi=true",
-      "-Dgallium-drivers=auto",
-      "-Ddri-drivers=auto",
-      "-Dosmesa=classic",
-      "-Dopengl=true",
-      "-Degl=auto",
-      "-Dgallium-xvmc=auto",
-      "-Dgallium-nine=true",
-      "-Dgles1=auto",
-      "-Dgles2=auto",
-      "-Dplatforms=x11,drm,wayland",
-      "-Dgbm=auto",
-      "-Dgallium-xa=auto",
-      "-Dglx=auto",
-      "-Dllvm=true",
-      "builddir"
+    
+    ENV['CFLAGS'] = "-fuse-ld=lld"
+    ENV['CXXFLAGS'] = "-fuse-ld=lld"
+
+    # Just use mostly defaults.
+    system "meson #{CREW_MESON_OPTIONS} builddir"
     system "ninja -C builddir"
   end
 
   def self.install
     system "DESTDIR=#{CREW_DEST_DIR} ninja -C builddir install"
-
   end
 end

@@ -3,22 +3,24 @@ require 'package'
 class Mpv < Package
   description 'Video player based on MPlayer/mplayer2'
   homepage 'https://mpv.io/'
-  version '0.30.0'
+  version '0.32.0'
   compatibility 'all'
-  source_url 'https://github.com/mpv-player/mpv/archive/v0.30.0.tar.gz'
-  source_sha256 '33a1bcb7e74ff17f070e754c15c52228cf44f2cefbfd8f34886ae81df214ca35'
+  source_url 'https://github.com/mpv-player/mpv/archive/v0.32.0.tar.gz'
+  source_sha256 '9163f64832226d22e24bbc4874ebd6ac02372cd717bef15c28a0aa858c5fe592'
 
   binary_url ({
-    aarch64: 'https://dl.bintray.com/chromebrew/chromebrew/mpv-0.30.0-chromeos-armv7l.tar.xz',
-     armv7l: 'https://dl.bintray.com/chromebrew/chromebrew/mpv-0.30.0-chromeos-armv7l.tar.xz',
-       i686: 'https://dl.bintray.com/chromebrew/chromebrew/mpv-0.30.0-chromeos-i686.tar.xz',
-     x86_64: 'https://dl.bintray.com/chromebrew/chromebrew/mpv-0.30.0-chromeos-x86_64.tar.xz',
+    aarch64: 'https://dl.bintray.com/chromebrew/chromebrew/mpv-0.32.0-chromeos-armv7l.tar.xz',
+     armv7l: 'https://dl.bintray.com/chromebrew/chromebrew/mpv-0.32.0-chromeos-armv7l.tar.xz',
+       i686: 'https://dl.bintray.com/chromebrew/chromebrew/mpv-0.32.0-chromeos-i686.tar.xz',
+     x86_64: 'https://dl.bintray.com/chromebrew/chromebrew/mpv-0.32.0-chromeos-x86_64.tar.xz',
+    
   })
   binary_sha256 ({
-    aarch64: '515681c255067b81a55142e891e8b7b58b384d6e9e863c66c1eada4388e084c7',
-     armv7l: '515681c255067b81a55142e891e8b7b58b384d6e9e863c66c1eada4388e084c7',
-       i686: '2ecc57ce3651769af37225a3d4c3df8aeca1324396a20a6964132a97a64e2e86',
-     x86_64: '71230e0f9639a87275611765305d8d07ab0a86eb84b128fc0b7f52d07fe201d5',
+    aarch64: 'ae9f812ccb3239ca85d25a6e919e1ded6e459867ba00d2027ea832782a38f9f1',
+     armv7l: 'ae9f812ccb3239ca85d25a6e919e1ded6e459867ba00d2027ea832782a38f9f1',
+       i686: '41f96ce28132e2d60978c3e7450594b58b03fda67edbb8fa2e56ce6442d3d1ee',
+     x86_64: 'e9623b3fdd06ab5bb762a15a3d7ef9b7875a10d4f0a5baaed5f83b9250b9fbe4',
+    
   })
 
   depends_on 'ld_default' => :build

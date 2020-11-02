@@ -3,22 +3,22 @@ require 'package'
 class Sommelier < Package
   description 'Sommelier works by redirecting X11 and Wayland programs to the built-in ChromeOS wayland server.'
   homepage 'https://chromium.googlesource.com/chromiumos/containers/sommelier'
-  version '1382ce084cc40'
+  version '1382ce084cc407'
   compatibility 'all'
   source_url 'https://chromium.googlesource.com/chromiumos/containers/sommelier/+/0.20/README?format=TEXT'
   source_sha256 'b58d799b16d20abf92369fe0749c73f7398996f0afa9933517051778a8bb16c3'
 
   binary_url ({
-    aarch64: 'https://dl.bintray.com/chromebrew/chromebrew/sommelier-1382ce084cc40-chromeos-armv7l.tar.xz',
-     armv7l: 'https://dl.bintray.com/chromebrew/chromebrew/sommelier-1382ce084cc40-chromeos-armv7l.tar.xz',
-       i686: 'https://dl.bintray.com/chromebrew/chromebrew/sommelier-1382ce084cc40-chromeos-i686.tar.xz',
-     x86_64: 'https://dl.bintray.com/chromebrew/chromebrew/sommelier-1382ce084cc40-chromeos-x86_64.tar.xz',
+    aarch64: 'https://dl.bintray.com/chromebrew/chromebrew/sommelier-1382ce084cc407-chromeos-armv7l.tar.xz',
+     armv7l: 'https://dl.bintray.com/chromebrew/chromebrew/sommelier-1382ce084cc407-chromeos-armv7l.tar.xz',
+       i686: 'https://dl.bintray.com/chromebrew/chromebrew/sommelier-1382ce084cc407-chromeos-i686.tar.xz',
+     x86_64: 'https://dl.bintray.com/chromebrew/chromebrew/sommelier-1382ce084cc407-chromeos-x86_64.tar.xz',
   })
   binary_sha256 ({
-    aarch64: 'e92036ee5c9e2fedbe9535a27f8f84fcbf525ce44f380bab570373ae76446fd5',
-     armv7l: 'e92036ee5c9e2fedbe9535a27f8f84fcbf525ce44f380bab570373ae76446fd5',
-       i686: 'd8497cdcd814445e1881e9719162cbeb9693f9376134dc25db32bb0891532fa5',
-     x86_64: '4a84a148fd1209b9196a331b17aec91a971c8f538d49cd764f3425c2d14217d4',
+    aarch64: '52c7940172194b786440ea9482835dfdab06df027e91e2e2ca1401acff397e94',
+     armv7l: '52c7940172194b786440ea9482835dfdab06df027e91e2e2ca1401acff397e94',
+       i686: '80c4866b627479b5469cfa04abecc297080b6b330ed9cf8484d2964ed11bfe94',
+     x86_64: '1b33ebc3d0201e1b700b4d55dc53951c77f5f1491af9c24e1c70e66d64107b40',
   })
 
   depends_on 'mesa'
@@ -60,6 +60,7 @@ class Sommelier < Package
       system "echo 'SOMM=\$(pidof sommelier 2> /dev/null)' >> stopsommelier"
       system "echo 'if [ ! -z \"\$SOMM\" ]; then' >> stopsommelier"
       system "echo '  killall -g sommelier' >> stopsommelier"
+      system "echo '  if pgrep \"Xwayland\"; then killall Xwayland; fi'"
       system "echo '  sleep 3' >> stopsommelier"
       system "echo 'fi' >> stopsommelier"
       system "echo 'SOMM=\$(pidof sommelier 2> /dev/null)' >> stopsommelier"
@@ -69,6 +70,8 @@ class Sommelier < Package
       system "echo '  echo \"sommelier process \$SOMM is running\"' >> stopsommelier"
       system "echo '  exit 1' >> stopsommelier"
       system "echo 'fi' >> stopsommelier"
+      system "echo '#!/bin/bash' > startsommelier"
+      system "echo 'set -a && source ~/.sommelier.env && set +a && initsommelier' >> startsommelier"
     end
   end
 
@@ -78,6 +81,7 @@ class Sommelier < Package
       system "install -Dm755 sommelierd #{CREW_DEST_PREFIX}/sbin/sommelierd"
       system "install -Dm755 initsommelier #{CREW_DEST_PREFIX}/bin/initsommelier"
       system "install -Dm755 stopsommelier #{CREW_DEST_PREFIX}/bin/stopsommelier"
+      system "install -Dm755 startsommelier #{CREW_DEST_PREFIX}/bin/startsommelier"
       system "install -Dm644 .sommelier.env #{CREW_DEST_HOME}/.sommelier.env"
     end
   end
@@ -92,7 +96,6 @@ class Sommelier < Package
     puts "echo 'fi' >> ~/.bashrc".lightblue
     puts "echo 'sudo chmod -R 1777 /tmp/.X11-unix' >> ~/.bashrc".lightblue
     puts "echo 'sudo chown root:root /tmp/.X11-unix' >> ~/.bashrc".lightblue
-    puts "echo 'alias startsommelier=\"set -a && source ~/.sommelier.env && set +a && initsommelier\"' >> ~/.bashrc".lightblue
     puts "echo 'startsommelier' >> ~/.bashrc".lightblue
     puts "source ~/.bashrc".lightblue
     puts

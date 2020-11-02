@@ -3,23 +3,25 @@ require 'package'
 class Zstd < Package
   description 'Zstandard - Fast real-time compression algorithm'
   homepage 'http://www.zstd.net'
-  version '1.3.4'
+  version '1.4.5'
   compatibility 'all'
-  source_url 'https://github.com/facebook/zstd/archive/v1.3.4.tar.gz'
-  source_sha256 '92e41b6e8dd26bbd46248e8aa1d86f1551bc221a796277ae9362954f26d605a9'
+  source_url 'https://github.com/facebook/zstd/archive/v1.4.5.tar.gz'
+  source_sha256 '734d1f565c42f691f8420c8d06783ad818060fc390dee43ae0a89f86d0a4f8c2'
 
   binary_url ({
-    aarch64: 'https://dl.bintray.com/chromebrew/chromebrew/zstd-1.3.4-chromeos-armv7l.tar.xz',
-     armv7l: 'https://dl.bintray.com/chromebrew/chromebrew/zstd-1.3.4-chromeos-armv7l.tar.xz',
-       i686: 'https://dl.bintray.com/chromebrew/chromebrew/zstd-1.3.4-chromeos-i686.tar.xz',
-     x86_64: 'https://dl.bintray.com/chromebrew/chromebrew/zstd-1.3.4-chromeos-x86_64.tar.xz',
+    aarch64: 'https://dl.bintray.com/chromebrew/chromebrew/zstd-1.4.5-chromeos-armv7l.tar.xz',
+     armv7l: 'https://dl.bintray.com/chromebrew/chromebrew/zstd-1.4.5-chromeos-armv7l.tar.xz',
+       i686: 'https://dl.bintray.com/chromebrew/chromebrew/zstd-1.4.5-chromeos-i686.tar.xz',
+     x86_64: 'https://dl.bintray.com/chromebrew/chromebrew/zstd-1.4.5-chromeos-x86_64.tar.xz',
   })
   binary_sha256 ({
-    aarch64: 'b07a39cc1d1261a2d7e6259f04e551823f41a1436bd4fe67729b4a569495362c',
-     armv7l: 'b07a39cc1d1261a2d7e6259f04e551823f41a1436bd4fe67729b4a569495362c',
-       i686: '4647ecc2d3f2a1d528acacdaf2c9ba1ca0afa09e74c04b81215092816058b75e',
-     x86_64: 'ad08a04fc5d985a006851254d6f6e20064f75db92081572e1d536969abf849dc',
+    aarch64: '5cf9b496bf10ca56ab900bc0b2b82ed3e30493a1bbdc170a456ff73454531bfc',
+     armv7l: '5cf9b496bf10ca56ab900bc0b2b82ed3e30493a1bbdc170a456ff73454531bfc',
+       i686: '184413b92f95c5fad0ca8724f4fb231018c46f8b24b42d39a2f892f034548dc1',
+     x86_64: 'a0fef2e2ed65835399ff8435bb806e74fe8b9e4e3019889a284bdd422fd1979a',
   })
+
+  depends_on 'lz4' => ':build'
   
   def self.build
     system 'make'

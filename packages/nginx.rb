@@ -3,22 +3,22 @@ require 'package'
 class Nginx < Package
   description 'nginx [engine x] is an HTTP and reverse proxy server, a mail proxy server, and a generic TCP/UDP proxy server, originally written by Igor Sysoev.'
   homepage 'http://nginx.org/'
-  version '1.17.4'
+  version '1.19.3'
   compatibility 'all'
-  source_url 'https://nginx.org/download/nginx-1.17.4.tar.gz'
-  source_sha256 '62854b365e66670ef4f1f8cc79124f914551444da974207cd5fe22d85710e555'
+  source_url 'https://nginx.org/download/nginx-1.19.3.tar.gz'
+  source_sha256 '91e5b74fa17879d2463294e93ad8f6ffc066696ae32ad0478ffe15ba0e9e8df0'
 
   binary_url ({
-    aarch64: 'https://dl.bintray.com/chromebrew/chromebrew/nginx-1.17.4-chromeos-armv7l.tar.xz',
-     armv7l: 'https://dl.bintray.com/chromebrew/chromebrew/nginx-1.17.4-chromeos-armv7l.tar.xz',
-       i686: 'https://dl.bintray.com/chromebrew/chromebrew/nginx-1.17.4-chromeos-i686.tar.xz',
-     x86_64: 'https://dl.bintray.com/chromebrew/chromebrew/nginx-1.17.4-chromeos-x86_64.tar.xz',
+    aarch64: 'https://dl.bintray.com/chromebrew/chromebrew/nginx-1.19.3-chromeos-armv7l.tar.xz',
+     armv7l: 'https://dl.bintray.com/chromebrew/chromebrew/nginx-1.19.3-chromeos-armv7l.tar.xz',
+       i686: 'https://dl.bintray.com/chromebrew/chromebrew/nginx-1.19.3-chromeos-i686.tar.xz',
+     x86_64: 'https://dl.bintray.com/chromebrew/chromebrew/nginx-1.19.3-chromeos-x86_64.tar.xz',
   })
   binary_sha256 ({
-    aarch64: 'f67f978ee52a403fb628c0d4128c01a0b556974d4a573afd1ae3f3228c5e3f72',
-     armv7l: 'f67f978ee52a403fb628c0d4128c01a0b556974d4a573afd1ae3f3228c5e3f72',
-       i686: '04adfd5c84292dfeb788a982d970373b786ec511710083bb0f1611bcb359a630',
-     x86_64: '25c755241869d55397734f97bc1ee96ad36fd028315f5ffd151eabda7c66de5e',
+    aarch64: 'aca948f9c2d22727e0e41fd6f81ac2e2f3775df9a683855dafd2ec664c0f2eb2',
+     armv7l: 'aca948f9c2d22727e0e41fd6f81ac2e2f3775df9a683855dafd2ec664c0f2eb2',
+       i686: '9dc198322df7652fb39474066516a783f57990c75939fcd906854be05d4ad9dd',
+     x86_64: 'c3798879f505b6173e4964105b741a7f5fdf85243562ad70d3b99a405ed1498f',
   })
 
   depends_on 'pcre'

@@ -3,22 +3,22 @@ require 'package'
 class Nftables < Package
   description 'nftables replaces the popular {ip,ip6,arp,eb}tables.'
   homepage 'https://netfilter.org/projects/nftables/'
-  version '0.9.0'
   compatibility 'all'
-  source_url 'https://netfilter.org/projects/nftables/files/nftables-0.9.0.tar.bz2'
-  source_sha256 'ad8181b5fcb9ca572f444bed54018749588522ee97e4c21922648bb78d7e7e91'
+  version '0.9.6-1'
+  source_url 'https://netfilter.org/projects/nftables/files/nftables-0.9.6.tar.bz2'
+  source_sha256 '68d6fdfe8ab02303e6b1f13968a4022da5b0120110eaee3233d806857937b66e'
 
   binary_url ({
-    aarch64: 'https://dl.bintray.com/chromebrew/chromebrew/nftables-0.9.0-chromeos-armv7l.tar.xz',
-     armv7l: 'https://dl.bintray.com/chromebrew/chromebrew/nftables-0.9.0-chromeos-armv7l.tar.xz',
-       i686: 'https://dl.bintray.com/chromebrew/chromebrew/nftables-0.9.0-chromeos-i686.tar.xz',
-     x86_64: 'https://dl.bintray.com/chromebrew/chromebrew/nftables-0.9.0-chromeos-x86_64.tar.xz',
+    aarch64: 'https://dl.bintray.com/chromebrew/chromebrew/nftables-0.9.6-1-chromeos-armv7l.tar.xz',
+     armv7l: 'https://dl.bintray.com/chromebrew/chromebrew/nftables-0.9.6-1-chromeos-armv7l.tar.xz',
+       i686: 'https://dl.bintray.com/chromebrew/chromebrew/nftables-0.9.6-1-chromeos-i686.tar.xz',
+     x86_64: 'https://dl.bintray.com/chromebrew/chromebrew/nftables-0.9.6-1-chromeos-x86_64.tar.xz',
   })
   binary_sha256 ({
-    aarch64: '5245548bfb5081d7a25291d3cc82052ace323d235eba1a73638cff83152e5a06',
-     armv7l: '5245548bfb5081d7a25291d3cc82052ace323d235eba1a73638cff83152e5a06',
-       i686: '5129603a7f40d072f8746430f6b1b14e0f77b50b3495154de7408c49ca891c87',
-     x86_64: '60cb68a70ecc066d7c6b92617db9f38593692f056c3620a3a42c7df0dd6a2ae7',
+    aarch64: '87b2be9b1f371c684d5d21c111e8baf96f61813963ee38726c0fde7dd089eb47',
+     armv7l: '87b2be9b1f371c684d5d21c111e8baf96f61813963ee38726c0fde7dd089eb47',
+       i686: '08f6d4bd5f6f7e3a3b4dea10fd5cabd96001ac72e85c11757eff818a5eea1ea7',
+     x86_64: 'af2c671949dde45656db452e635af6f04e66b39c370ae0807afee0ad63a1e978',
   })
 
   depends_on 'help2man'
