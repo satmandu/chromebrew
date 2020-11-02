@@ -12,6 +12,7 @@ LIBC_VERSION = if File.exist? "/#{ARCH_LIB}/libc-2.27.so" then '2.27' else '2.23
 
 if ENV['CREW_PREFIX'].to_s == ''
   CREW_PREFIX = '/usr/local'
+  CREW_PREFIX_ACTUAL = CREW_PREFIX
 else
   CREW_PREFIX_ACTUAL = ENV['CREW_PREFIX']
   CREW_PREFIX = '/usr/local'
