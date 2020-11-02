@@ -331,7 +331,7 @@ def const (var)
       'CREW_NPROC',
       'CREW_OPTIONS',
       'CREW_PREFIX',
-      'CREW_PREFIX_ACTUAL'
+      'CREW_PREFIX_ACTUAL',
       'CREW_VERSION',
       'HOME',
       'LIBC_VERSION',
@@ -651,8 +651,7 @@ def strip_find_files (find_cmd, strip_option = "")
 end
 
   NOSLASH_CREW_PREFIX = CREW_PREFIX_ACTUAL.delete_prefix '/'
-  #TAR_ALT_PREFIX = if CREW_PREFIX != '/usr/local' then "--transform=s*usr/local*#{NOSLASH_CREW_PREFIX}*" else '' end
-  TAR_ALT_PREFIX = "--transform=s*usr/local*#{NOSLASH_CREW_PREFIX}*"
+  TAR_ALT_PREFIX = if CREW_PREFIX_ACTUAL != '/usr/local' then "--transform=s*usr/local*#{NOSLASH_CREW_PREFIX}*" else '' end
 
 def install_package (pkgdir)
   Dir.chdir pkgdir do
