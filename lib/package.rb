@@ -115,7 +115,7 @@ class Package
     # See lib/const.rb for more details
 
     if @in_build == true
-      CREW_PREFIX.replace = '/usrlocal'
+      CREW_PREFIX.replace '/usrlocal'
       nproc = ''
       nproc_opt =  ''
       args.each do |arg|
@@ -149,6 +149,6 @@ class Package
     Kernel.system(*args)
     exitstatus = $?.exitstatus
     raise InstallError.new("`#{args.join(" ")}` exited with #{exitstatus}") unless exitstatus == 0
-    CREW_PREFIX.replace = CREW_PREFIX_SAVE
+    CREW_PREFIX.replace CREW_PREFIX_SAVE
   end
 end
