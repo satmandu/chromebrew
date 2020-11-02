@@ -649,6 +649,8 @@ def strip_find_files (find_cmd, strip_option = "")
   system "#{find_cmd} | xargs -r sh -c 'for i in \"$0\" \"$@\"; do case \"$(head -c 4 $i)\" in ?ELF|\!?ar) echo \"$i\";; esac ; done' | xargs -r strip #{strip_option}"
 end
 
+  NOSLASH_CREW_PREFIX = CREW_PREFIX.delete_prefix '/'
+
 def install_package (pkgdir)
   Dir.chdir pkgdir do
     # install filelist, dlist and binary files
@@ -665,7 +667,6 @@ def install_package (pkgdir)
 
     # Strip binaries but not compressed archives
     strip_find_files "find . -type f ! -iname '*\.bz2' ! -iname '*\.gz' ! -iname '*\.lha' ! -iname '*\.lz' ! -iname '*\.rar' ! -iname '*\.tar' ! -iname '*\.tbz' ! -iname '*\.tgz' ! -iname '\*.txz' ! -iname '*\.xz' ! -iname '*\.zip' -perm /111 -print | sed -e '/lib.*\.a$/d' -e '/lib.*\.so/d'"
-    noslashCREW_PREFIX = "#{CREW_PREFIX}".delete_prefix('/')
     if @opt_verbose then
       if Dir.exists? "#{pkgdir}/home" then
         puts "tar cvf - --transform=s*usr/local*#{NOSLASH_CREW_PREFIX}* ./usr/local/* ./home/* | (cd /; tar vxp --keep-directory-symlink -f -)"
