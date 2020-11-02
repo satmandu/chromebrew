@@ -665,7 +665,7 @@ def install_package (pkgdir)
 
     # Strip binaries but not compressed archives
     strip_find_files "find . -type f ! -iname '*\.bz2' ! -iname '*\.gz' ! -iname '*\.lha' ! -iname '*\.lz' ! -iname '*\.rar' ! -iname '*\.tar' ! -iname '*\.tbz' ! -iname '*\.tgz' ! -iname '\*.txz' ! -iname '*\.xz' ! -iname '*\.zip' -perm /111 -print | sed -e '/lib.*\.a$/d' -e '/lib.*\.so/d'"
-    noslashCREW_PREFIX = 'CREW_PREFIX'.delete_prefix('/')
+    noslashCREW_PREFIX = "#{CREW_PREFIX}".delete_prefix('/')
     if @opt_verbose then
       if Dir.exists? "#{pkgdir}/home" then
         puts "tar cvf - --transform=s@usr/local/@#{noslashCREW_PREFIX}@ ./usr/local/* ./home/* | (cd /; tar vxp --keep-directory-symlink -f -)"
