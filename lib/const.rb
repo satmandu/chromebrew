@@ -1,6 +1,6 @@
 # Defines common constants used in different parts of crew
 
-CREW_VERSION = '1.5.2'
+CREW_VERSION = '1.5.1'
 
 ARCH_ACTUAL = `uname -m`.strip
 # This helps with virtualized builds on aarch64 machines
@@ -12,29 +12,20 @@ LIBC_VERSION = if File.exist? "/#{ARCH_LIB}/libc-2.27.so" then '2.27' else '2.23
 
 if ENV['CREW_PREFIX'].to_s == ''
   CREW_PREFIX = '/usr/local'
-  CREW_PREFIX_ACTUAL = CREW_PREFIX
 else
-  CREW_PREFIX_ACTUAL = ENV['CREW_PREFIX']
-  CREW_PREFIX = '/usr/local'
-  ENV['PATH'] = "#{CREW_PREFIX_ACTUAL}/bin:#{CREW_PREFIX_ACTUAL}/sbin:/usr/bin:/bin:/opt/bin"
-  ENV['MANPATH'] = "#{CREW_PREFIX_ACTUAL}/share/man:/usr/share/man"
-  if @pkgName
-    @pkg.build_from_source = true
-  end
+  CREW_PREFIX = ENV['CREW_PREFIX']
+  @pkg.build_from_source = true
 end
 CREW_LIB_PREFIX = CREW_PREFIX + '/' + ARCH_LIB
-CREW_LIB_PREFIX_ACTUAL = CREW_PREFIX_ACTUAL + '/' + ARCH_LIB
-ENV['LD_LIBRARY_PATH'] = "#{CREW_LIB_PREFIX_ACTUAL}"
 CREW_MAN_PREFIX = CREW_PREFIX + '/share/man'
-CREW_MAN_PREFIX_ACTUAL = CREW_PREFIX_ACTUAL + '/share/man'
 
-CREW_LIB_PATH = CREW_PREFIX_ACTUAL + '/lib/crew/'
-CREW_CONFIG_PATH = CREW_PREFIX_ACTUAL + '/etc/crew/'
-CREW_BREW_DIR = CREW_PREFIX_ACTUAL + '/tmp/crew/'
+CREW_LIB_PATH = CREW_PREFIX + '/lib/crew/'
+CREW_CONFIG_PATH = CREW_PREFIX + '/etc/crew/'
+CREW_BREW_DIR = CREW_PREFIX + '/tmp/crew/'
 CREW_DEST_DIR = CREW_BREW_DIR + 'dest'
-CREW_DEST_PREFIX = CREW_DEST_DIR + CREW_PREFIX_ACTUAL
-CREW_DEST_LIB_PREFIX = CREW_DEST_DIR + CREW_LIB_PREFIX_ACTUAL
-CREW_DEST_MAN_PREFIX = CREW_DEST_DIR + CREW_MAN_PREFIX_ACTUAL
+CREW_DEST_PREFIX = CREW_DEST_DIR + CREW_PREFIX
+CREW_DEST_LIB_PREFIX = CREW_DEST_DIR + CREW_LIB_PREFIX
+CREW_DEST_MAN_PREFIX = CREW_DEST_DIR + CREW_MAN_PREFIX
 
 if ENV['CREW_PREFIX'].to_s == ''
   HOME = ENV['HOME']

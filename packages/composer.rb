@@ -3,10 +3,10 @@ require 'package'
 class Composer < Package
   description 'Dependency Manager for PHP'
   homepage 'https://getcomposer.org/'
-  version '1.10.13'
+  version '2.0.7'
   compatibility 'all'
-  source_url 'https://github.com/composer/composer/archive/1.10.13.tar.gz'
-  source_sha256 '363500cc6ce33ff2d87ce9d706e4577d7328b7a932e3edd72df26b85b369ec78'
+  source_url 'https://github.com/composer/composer/archive/2.0.7.tar.gz'
+  source_sha256 '204215dccc01fea015de5c8506100a078c821fe31afb3eee5aa93c5841f83f4d'
 
   depends_on 'php74' unless File.exists? "#{CREW_PREFIX}/bin/php"
   depends_on 'xdg_base'
@@ -22,15 +22,10 @@ class Composer < Package
   end
 
   def self.install
-    system "php -r \"copy('https://getcomposer.org/installer', 'composer-setup.php');\""
-    system 'curl -Ls -o installer.sig https://composer.github.io/installer.sig'
-    abort 'Checksum mismatch. :/ Try again.'.lightred unless Digest::SHA384.hexdigest( File.read('composer-setup.php') ) == File.read('installer.sig')
-    FileUtils.mkdir_p "#{CREW_DEST_PREFIX}/bin"
-    system "php composer-setup.php --install-dir=#{CREW_DEST_PREFIX}/bin --filename=composer --version=#{version}"
-    FileUtils.mkdir_p "#{CREW_DEST_PREFIX}/.config"
-    FileUtils.cp_r "#{HOME}/.config/composer", "#{CREW_DEST_PREFIX}/.config"
-    FileUtils.rm_rf "#{HOME}/.config"
-    FileUtils.ln_s "#{CREW_PREFIX}/.config", "#{HOME}/.config"
+    system "curl -Ls -o composer https://github.com/composer/composer/releases/download/#{version}/composer.phar"
+    abort 'Checksum mismatch. :/ Try again.'.lightred unless Digest::SHA256.hexdigest( File.read('composer') ) == '0a060e8caf1d5cde55c4562fd68369b08cf231b8fd30da9c8f994b111557ebe9'
+    system "install -Dm755 composer #{CREW_DEST_PREFIX}/bin/composer"
+    FileUtils.ln_sf "#{CREW_PREFIX}/.config", "#{HOME}/.config"
   end
 
   def self.postinstall
