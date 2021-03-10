@@ -15,10 +15,10 @@ class Libwebp < Package
      x86_64: 'https://dl.bintray.com/chromebrew/chromebrew/libwebp-1.2.0-2-chromeos-x86_64.tar.xz'
   })
   binary_sha256({
-    aarch64: 'f76080fd09b1ceb14b1b7aacc2984ac2a4bae0b499e4cba9959d751f3f174dda',
-     armv7l: 'f76080fd09b1ceb14b1b7aacc2984ac2a4bae0b499e4cba9959d751f3f174dda',
-       i686: 'c55bb0665af44bbe228ae5d2cce42b2061cb1c394da8cdd70f1f143542fff22f',
-     x86_64: 'c57164afcfc86e140f25e7864b60777a10c039201b705dbfa236fb816702301d'
+    aarch64: '0f533394a4dc99341aee73d01137340712a7c53d6c2d356b301be02e044f1b21',
+     armv7l: '0f533394a4dc99341aee73d01137340712a7c53d6c2d356b301be02e044f1b21',
+       i686: '466264dba3927e1ef045144aeba01ad5c132336eb0f9e9c4695529abad14ad04',
+     x86_64: '3fdc15918aad6ad2ba36929b9ba7b39dd59750b114b0fb96b9bb31d030a1b4e4'
   })
 
   depends_on 'giflib'
