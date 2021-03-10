@@ -16,10 +16,10 @@ class Libtiff < Package
      x86_64: 'https://dl.bintray.com/chromebrew/chromebrew/libtiff-4.2.0-1-chromeos-x86_64.tar.xz'
   })
   binary_sha256({
-    aarch64: 'd03ee1b9843ed744ff39e3a1c717ed276061e4601b4fa12175297dfe0ca87483',
-     armv7l: 'd03ee1b9843ed744ff39e3a1c717ed276061e4601b4fa12175297dfe0ca87483',
-       i686: 'fc862ebebdb6a1edaaa54ff22cbfc59dc9a9e6bbb35747e28acb88a615f5c1c8',
-     x86_64: '85c8ef455fdc5d9125079622606a0d2b55ec3523272b08fffb91a080ea379785'
+    aarch64: '692d843be36450b10ffe6371d703c7a99bfeb1ccf9f1c9cf82fa32a53c7b99f5',
+     armv7l: '692d843be36450b10ffe6371d703c7a99bfeb1ccf9f1c9cf82fa32a53c7b99f5',
+       i686: '7c069522a0df8a2c33a12a17f516d7832dbae382ad20107ef28804f9f9a6c848',
+     x86_64: '745f7a8b60b4a0705d7d92f24872a949dff5e25de1608030f0a5aeb7c0c54e73'
   })
 
   depends_on 'imake' => :build
