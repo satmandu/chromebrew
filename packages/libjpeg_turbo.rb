@@ -3,23 +3,23 @@ require 'package'
 class Libjpeg_turbo < Package
   description 'Libjpeg-turbo implements both the traditional libjpeg API as well as the less powerful but more straightforward TurboJPEG API.'
   homepage 'https://libjpeg-turbo.org'
-  @_ver = '2.0.90'
+  @_ver = '2.0.6'
   version @_ver
   compatibility 'all'
   source_url "https://github.com/libjpeg-turbo/libjpeg-turbo/archive/#{@_ver}.tar.gz"
-  source_sha256 '6a965adb02ad898b2ae48214244618fe342baea79db97157fdc70d8844ac6f09'
+  source_sha256 '005aee2fcdca252cee42271f7f90574dda64ca6505d9f8b86ae61abc2b426371'
 
   binary_url({
-    aarch64: 'https://dl.bintray.com/chromebrew/chromebrew/libjpeg_turbo-2.0.90-chromeos-armv7l.tar.xz',
-     armv7l: 'https://dl.bintray.com/chromebrew/chromebrew/libjpeg_turbo-2.0.90-chromeos-armv7l.tar.xz',
-       i686: 'https://dl.bintray.com/chromebrew/chromebrew/libjpeg_turbo-2.0.90-chromeos-i686.tar.xz',
-     x86_64: 'https://dl.bintray.com/chromebrew/chromebrew/libjpeg_turbo-2.0.90-chromeos-x86_64.tar.xz'
+    aarch64: 'https://dl.bintray.com/chromebrew/chromebrew/libjpeg_turbo-2.0.6-chromeos-armv7l.tar.xz',
+     armv7l: 'https://dl.bintray.com/chromebrew/chromebrew/libjpeg_turbo-2.0.6-chromeos-armv7l.tar.xz',
+       i686: 'https://dl.bintray.com/chromebrew/chromebrew/libjpeg_turbo-2.0.6-chromeos-i686.tar.xz',
+     x86_64: 'https://dl.bintray.com/chromebrew/chromebrew/libjpeg_turbo-2.0.6-chromeos-x86_64.tar.xz'
   })
   binary_sha256({
-    aarch64: '0b37e7892a437e38932a66209835a1c513bd07f48e172d0749d18f16bf6716c4',
-     armv7l: '0b37e7892a437e38932a66209835a1c513bd07f48e172d0749d18f16bf6716c4',
-       i686: '537a2b0ddd0701af94a0660d2c8273ec78a313989e0851eba51dd152412f8b69',
-     x86_64: '1f6c474ef8a6077ecbf7304a6657777b9d55beb935d817cfbd7c49a17239a24b'
+    aarch64: '03aaee5e33b24e1919784d2167e1bd797c08ebf0af496a5de429dd053552fdaa',
+     armv7l: '03aaee5e33b24e1919784d2167e1bd797c08ebf0af496a5de429dd053552fdaa',
+       i686: 'ed6436cc18712d3eb58865b0515e6a4856b6999482d9e056e35add57ca4eb54b',
+     x86_64: 'd06c24d674194809b95b37cf66b7813230697a4e75ac29756917605097b8bae0'
   })
 
   depends_on 'yasm' => :build
@@ -48,5 +48,6 @@ class Libjpeg_turbo < Package
 
   def self.install
     system "DESTDIR=#{CREW_DEST_DIR} ninja -C builddir install"
+    FileUtils.install 'jpegint.h', "#{CREW_DEST_PREFIX}/include/", mode: 0o644
   end
 end
