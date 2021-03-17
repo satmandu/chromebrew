@@ -163,6 +163,18 @@ if [ ! -f device.json ]; then
 fi
 
 # extract, install and register packages
+dl_ext_upd () {
+  name="$1"
+  url="$2"
+  tarfile="$3"
+  sha256="$4"
+  version="$5"
+   
+   download_check "${name}" "${url}" "${tarfile}" "${sha256}"
+   extract_install "${name}" "${tarfile}"
+   update_device_json "${name}" "${version}"
+}
+
 for i in $(seq 0 $((${#urls[@]} - 1))); do
   url="${urls["${i}"]}"
   sha256="${sha256s["${i}"]}"
@@ -172,9 +184,18 @@ for i in $(seq 0 $((${#urls[@]} - 1))); do
   version="$(echo ${rest} | sed -e 's/-chromeos.*$//')"
                         # extract string between first '-' and "-chromeos"
 
-  download_check "${name}" "${url}" "${tarfile}" "${sha256}"
-  extract_install "${name}" "${tarfile}"
-  update_device_json "${name}" "${version}"
+  #download_check "${name}" "${url}" "${tarfile}" "${sha256}"
+  #extract_install "${name}" "${tarfile}"
+  #update_device_json "${name}" "${version}"
+  
+   dl_ext_upd "${name}" "${url}" "${tarfile}" "${sha256}"  "${version}" &
+   pids[${i}]=$!
+
+done
+
+# wait for all pids
+for pid in ${pids[*]}; do
+    wait $pid
 done
 
 ## workaround https://github.com/skycocker/chromebrew/issues/3305
