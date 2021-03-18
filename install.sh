@@ -198,22 +198,13 @@ git fetch origin "${BRANCH}"
 git reset --hard origin/"${BRANCH}"
 crew update
 
-corefiles=$(curl -Ls https://github.com/skycocker/chromebrew/raw/master/tools/core_packages.txt)
-for package in $corefiles; do
-echo "downloading core package $package"
-(&>/dev/null crew -d download "$package" &)
-done
-echo "waiting for core package downloads to finish"
-while $(pgrep -f ruby >/dev/null)
-do
-   sleep 1
-done
-for package in $corefiles; do
-yes | crew install "$package"
-done
-
+# install package with parallel
+yes | crew install moreutils
+corefilepkgs=$(curl -Ls https://github.com/skycocker/chromebrew/raw/master/tools/core_packages.txt)
+buildessentialpkgs=$(grep "^[[:blank:]] depends_on" buildessential.rb | awk '{print $2}' | sed "s;';;g")
+parallel -j 3 crew -d download -- $corefilepkgs $buildessentialpkgs
 # install a base set of essential packages
-yes | crew install buildessential less most
+yes | crew install $corefilepkgs buildessential less most
 
 echo
 if [[ "${CREW_PREFIX}" != "/usr/local" ]]; then
