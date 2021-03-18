@@ -198,17 +198,17 @@ git fetch origin "${BRANCH}"
 git reset --hard origin/"${BRANCH}"
 crew update
 
-for package in $(curl -Ls https://github.com/skycocker/chromebrew/raw/master/tools/core_packages.txt ); do
-crew download "$package" &>/dev/null &
-pids[${package}]=$!
+corefiles=$(curl -Ls https://github.com/skycocker/chromebrew/raw/master/tools/core_packages.txt)
+for package in $corefiles; do
+echo "downloading core package $package"
+(&>/dev/null crew -d download "$package" &)
 done
-
-# wait for all pids
-for pid in ${pids[*]}; do
-    wait $pid
+echo "waiting for core package downloads to finish"
+while pgrep -f ruby
+do
+   sleep 1
 done
-
-for package in $(curl -Ls https://github.com/skycocker/chromebrew/raw/master/tools/core_packages.txt ); do
+for package in $corefiles; do
 yes | crew install "$package"
 done
 
