@@ -200,8 +200,8 @@ crew update
 
 # install package with parallel
 yes | crew install moreutils
-corefilepkgs=$(curl -Ls https://github.com/skycocker/chromebrew/raw/master/tools/core_packages.txt)
-buildessentialpkgs=$(grep "^[[:blank:]] depends_on" buildessential.rb | awk '{print $2}' | sed "s;';;g")
+corefilepkgs=$(curl -Ls https://github.com/skycocker/chromebrew/raw/master/tools/core_packages.txt | sed "s;llvm;;g" )
+buildessentialpkgs=$(grep "^[[:blank:]] depends_on" packages/buildessential.rb | awk '{print $2}' | sed "s;';;g" | sed "s;gcc10;;g")
 parallel -j 3 crew -d download -- $corefilepkgs $buildessentialpkgs
 # install a base set of essential packages
 yes | crew install $corefilepkgs buildessential less most
