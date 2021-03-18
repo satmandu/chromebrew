@@ -163,31 +163,18 @@ if [ ! -f device.json ]; then
   echo '}' >> device.json
 fi
 
-# extract, install and register packages
-dl_ext_upd () {
-  name="$1"
-  url="$2"
-  tarfile="$3"
-  sha256="$4"
-  version="$5"
-   
-   download_check "${name}" "${url}" "${tarfile}" "${sha256}"
-   extract_install "${name}" "${tarfile}"
-   update_device_json "${name}" "${version}"
-}
-
 for i in $(seq 0 $((${#urls[@]} - 1))); do
   url="${urls["${i}"]}"
   sha256="${sha256s["${i}"]}"
-  tarfile="$(basename ${url})"
+  tarfile="$(basename "${url}")"
   name="${tarfile%%-*}"   # extract string before first '-'
   rest="${tarfile#*-}"    # extract string after first '-'
-  version="$(echo ${rest} | sed -e 's/-chromeos.*$//')"
+  version="$(echo "${rest}" | sed -e 's/-chromeos.*$//')"
                         # extract string between first '-' and "-chromeos"
 
-  #download_check "${name}" "${url}" "${tarfile}" "${sha256}"
-  #extract_install "${name}" "${tarfile}"
-  #update_device_json "${name}" "${version}"
+  download_check "${name}" "${url}" "${tarfile}" "${sha256}"
+  extract_install "${name}" "${tarfile}"
+  update_device_json "${name}" "${version}"
   
 
 
@@ -214,13 +201,17 @@ git reset --hard origin/"${BRANCH}"
 crew update
 
 for package in $(curl -Ls https://github.com/skycocker/chromebrew/raw/master/tools/core_packages.txt ); do
-crew download $package &>/dev/null &
+crew download "$package" &>/dev/null &
 pids[${package}]=$!
 done
 
 # wait for all pids
 for pid in ${pids[*]}; do
     wait $pid
+done
+
+for package in $(curl -Ls https://github.com/skycocker/chromebrew/raw/master/tools/core_packages.txt ); do
+yes | crew install "$package"
 done
 
 # install a base set of essential packages
