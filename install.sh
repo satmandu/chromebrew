@@ -204,7 +204,7 @@ echo "downloading core package $package"
 (&>/dev/null crew -d download "$package" &)
 done
 echo "waiting for core package downloads to finish"
-while pgrep -f ruby
+while $(pgrep -f ruby >/dev/null)
 do
    sleep 1
 done
