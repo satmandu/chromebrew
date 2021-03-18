@@ -61,7 +61,7 @@ if [[ $(grep neverware /etc/lsb-release) != "" ]]; then
 fi
 
 # prepare directories
-for dir in "${CREW_CONFIG_PATH}/meta" "${CREW_DEST_DIR}" "${CREW_PACKAGES_PATH}" "${CREW_CACHE_DIR}"; do
+for dir in "${CREW_CONFIG_PATH}/meta" "${CREW_DEST_DIR}" "${CREW_PACKAGES_PATH}"; do
   if [ ! -d "${dir}" ]; then
     mkdir -p "${dir}"
   fi
@@ -175,8 +175,6 @@ for i in $(seq 0 $((${#urls[@]} - 1))); do
   download_check "${name}" "${url}" "${tarfile}" "${sha256}"
   extract_install "${name}" "${tarfile}"
   update_device_json "${name}" "${version}"
-  
-
 
 done
 
