@@ -14,6 +14,7 @@ CREW_CONFIG_PATH="${CREW_PREFIX}/etc/crew/"
 CREW_BREW_DIR="${CREW_PREFIX}/tmp/crew/"
 CREW_DEST_DIR="${CREW_BREW_DIR}/dest"
 CREW_PACKAGES_PATH="${CREW_LIB_PATH}/packages"
+CREW_CACHE_DIR="${CREW_CACHE_DIR:-~/.cache/crewcache}"
 CURL="${CURL:-curl}"
 
 EARLY_PACKAGES="gcc10 llvm brotli c_ares libcyrussasl libiconv libidn2 \
@@ -60,7 +61,7 @@ if [[ $(grep neverware /etc/lsb-release) != "" ]]; then
 fi
 
 # prepare directories
-for dir in "${CREW_CONFIG_PATH}/meta" "${CREW_DEST_DIR}" "${CREW_PACKAGES_PATH}"; do
+for dir in "${CREW_CONFIG_PATH}/meta" "${CREW_DEST_DIR}" "${CREW_PACKAGES_PATH}" "${CREW_CACHE_DIR}"; do
   if [ ! -d "${dir}" ]; then
     mkdir -p "${dir}"
   fi
@@ -188,14 +189,8 @@ for i in $(seq 0 $((${#urls[@]} - 1))); do
   #extract_install "${name}" "${tarfile}"
   #update_device_json "${name}" "${version}"
   
-   dl_ext_upd "${name}" "${url}" "${tarfile}" "${sha256}"  "${version}" &
-   pids[${i}]=$!
 
-done
 
-# wait for all pids
-for pid in ${pids[*]}; do
-    wait $pid
 done
 
 ## workaround https://github.com/skycocker/chromebrew/issues/3305
@@ -217,6 +212,16 @@ echo crew >> .git/info/sparse-checkout
 git fetch origin "${BRANCH}"
 git reset --hard origin/"${BRANCH}"
 crew update
+
+for package in $(curl -Ls https://github.com/skycocker/chromebrew/raw/master/tools/core_packages.txt ); do
+crew download $package &>/dev/null &
+pids[${package}]=$!
+done
+
+# wait for all pids
+for pid in ${pids[*]}; do
+    wait $pid
+done
 
 # install a base set of essential packages
 yes | crew install buildessential less most
