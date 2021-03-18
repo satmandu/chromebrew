@@ -20,7 +20,8 @@ CURL="${CURL:-curl}"
 EARLY_PACKAGES="gcc10 llvm brotli c_ares libcyrussasl libiconv libidn2 \
 libmetalink libnghttp2 libpsl libssh2 libtirpc libunistring lz4 openldap \
 rtmpdump zstd ncurses ca_certificates ruby libffi openssl nettle krb5 \
-p11kit libtasn1 gnutls curl git icu4c libedit"
+p11kit libtasn1 gnutls curl git icu4c libedit gdbm libpipeline python3 \
+util_linux moreutils"
 
 ARCH="$(uname -m)"
 
@@ -197,12 +198,13 @@ echo crew >> .git/info/sparse-checkout
 git fetch origin "${BRANCH}"
 git reset --hard origin/"${BRANCH}"
 crew update
+crew postinstall $EARLY_PACKAGES
 
-# install package with parallel
-yes | crew install moreutils
+# Use parallel to download many packages before install
 corefilepkgs=$(curl -Ls https://github.com/skycocker/chromebrew/raw/master/tools/core_packages.txt | sed "s;llvm;;g" )
 buildessentialpkgs=$(grep "^[[:blank:]] depends_on" packages/buildessential.rb | awk '{print $2}' | sed "s;';;g" | sed "s;gcc10;;g")
 parallel -j 3 crew -d download -- $corefilepkgs $buildessentialpkgs
+yes | crew postinstall $EARLY_PACKAGES
 # install a base set of essential packages
 yes | crew install $corefilepkgs buildessential less most
 
