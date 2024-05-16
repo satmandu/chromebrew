@@ -24,10 +24,8 @@ def save_json(json_object)
   end
 
   # Copy over original if the write to the tmp file succeeds.
-  crewlog "Saving tmp device.json to #{json_path}..."
-  crewlog `diff -Npaur #{tmp_json_path} #{json_path}`.chomp
-  FileUtils.cp(tmp_json_path, json_path)
-  crewlog "Deleting tmp device.json..."
-  FileUtils.rm(tmp_json_path)
+  crewlog "The device.json changes are:"
+  crewlog `diff -Npaur #{json_path} #{tmp_json_path}`.chomp
+  FileUtils.cp(tmp_json_path, json_path) && FileUtils.rm(tmp_json_path)
   load_json
 end
