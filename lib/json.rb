@@ -13,15 +13,20 @@ def load_json
 end
 
 def save_json(json_object)
-  crewlog 'Saving device.json...'
+  json_path = File.join(CREW_CONFIG_PATH, 'device.json')
+  tmp_json_path = File.join(CREW_CONFIG_PATH, 'device.json.tmp'), JSON.pretty_generate(JSON.parse(json_object.to_json))
+  crewlog "Saving device.json to #{tmp_json_path}..."
   begin
-    File.write File.join(CREW_CONFIG_PATH, 'device.json.tmp'), JSON.pretty_generate(JSON.parse(json_object.to_json))
+    File.write tmp_json_path
   rescue StandardError
     puts 'Error writing updated packages json file!'.lightred
     abort
   end
 
   # Copy over original if the write to the tmp file succeeds.
-  FileUtils.cp("#{CREW_CONFIG_PATH}/device.json.tmp", File.join(CREW_CONFIG_PATH, 'device.json')) && FileUtils.rm("#{CREW_CONFIG_PATH}/device.json.tmp")
+  crewlog "Saving tmp device.json to #{json_path}..."
+  FileUtils.cp(tmp_json_path, json_path)
+  crewlog "Deleting tmp device.json..."
+  FileUtils.rm(tmp_json_path)
   load_json
 end
