@@ -1,6 +1,7 @@
 require 'fileutils'
 require 'json'
 require_relative '../lib/const'
+require_relative '../lib/json'
 require_relative '../lib/package_utils'
 
 class Command
