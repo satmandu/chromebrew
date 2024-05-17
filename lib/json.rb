@@ -6,10 +6,12 @@ require_relative 'crewlog'
 def load_json
   # load_json(): (re)load device.json
   json_path = File.join(CREW_CONFIG_PATH, 'device.json')
+  system "ls -aFl /usr/local/etc/crew/"
   @device   = JSON.load_file(json_path, symbolize_names: true)
 
   # symbolize also values
   @device.transform_values! {|val| val.is_a?(String) ? val.to_sym : val }
+  system "ls -aFl /usr/local/etc/crew/"
 end
 
 def save_json(json_object)
@@ -32,5 +34,6 @@ def save_json(json_object)
   system "ls -aFl /usr/local/etc/crew/"
   # crewlog "Deleting tmp device.json from #{tmp_json_path}..."
   # FileUtils.rm(tmp_json_path)
-  load_json
+  @device   = JSON.load_file(json_path, symbolize_names: true)
+  @device.transform_values! {|val| val.is_a?(String) ? val.to_sym : val }
 end
