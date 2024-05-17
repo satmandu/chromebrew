@@ -1,5 +1,6 @@
 # lib/fixup.rb
 # Add fixups to be run during crew update here.
+require_relative 'json'
 
 CREW_VERBOSE = ARGV.intersect?(%w[-v --verbose]) unless defined?(CREW_VERBOSE)
 
@@ -19,7 +20,7 @@ Dir.chdir CREW_LIB_PATH do
 end
 
 # Rename the binary_sha256 variable to sha256 in the device.json file
-system(" sed -i 's/binary_sha256/sha256/g' #{File.join(CREW_CONFIG_PATH, 'device.json')}")
+system(" sed -i 's/binary_sha256/sha256/g' #{File.join(CREW_CONFIG_PATH, 'device.json')}") && load_json
 
 # Check for renamed and deprecated packages, and handle them.
 
@@ -85,7 +86,7 @@ pkg_update_arr.each do |pkg|
       FileUtils.rm_f old_filelist
       FileUtils.rm_f old_directorylist
       @device[:installed_packages].delete_if { |elem| elem[:name] == pkg[:pkg_name] }
-      File.write "#{CREW_CONFIG_PATH}/device.json", JSON.pretty_generate(JSON.parse(@device.to_json))
+      save_json(@device)
       next
     end
     # Handle case of package needing to be replaced.
@@ -99,33 +100,14 @@ pkg_update_arr.each do |pkg|
     end
     # If new filelist or directorylist do not exist and new package is not
     # marked as installed in device.json then rename and edit device.json .
-    begin
-      FileUtils.cp "#{CREW_CONFIG_PATH}/device.json", "#{CREW_CONFIG_PATH}/device.json.bak"
-      FileUtils.mv old_filelist, new_filelist
-      FileUtils.mv old_directorylist, new_directorylist
-      @device[:installed_packages].map do |x|
-        x[:name] = pkg[:pkg_rename] if x[:name] == pkg[:pkg_name]
-        next x
-      end
-      File.write "#{CREW_CONFIG_PATH}/device.json.new", JSON.pretty_generate(JSON.parse(@device.to_json))
-      @device = JSON.load_file("#{CREW_CONFIG_PATH}/device.json.new", symbolize_names: true)
-      @device.transform_values! {|val| val.is_a?(String) ? val.to_sym : val }
-      raise StandardError, 'Failed to replace pkg name...'.lightred unless @device[:installed_packages].any? { |elem| elem[:name] == pkg[:pkg_rename] }
-      # Ok to write working device.json
-      File.write "#{CREW_CONFIG_PATH}/device.json", JSON.pretty_generate(JSON.parse(@device.to_json))
-      puts "#{pkg[:pkg_name].capitalize} renamed to #{pkg[:pkg_rename].capitalize}".lightgreen
-    rescue StandardError
-      puts 'Restoring old filelist, directorylist, and device.json...'.lightred
-      FileUtils.mv new_filelist, old_filelist
-      FileUtils.mv new_directorylist, old_directorylist
-      FileUtils.cp "#{CREW_CONFIG_PATH}/device.json.bak", "#{CREW_CONFIG_PATH}/device.json"
+    FileUtils.mv old_filelist, new_filelist
+    FileUtils.mv old_directorylist, new_directorylist
+    @device[:installed_packages].map do |x|
+      x[:name] = pkg[:pkg_rename] if x[:name] == pkg[:pkg_name]
+      next x
     end
-    # Reload json file.
-    @device = JSON.load_file("#{CREW_CONFIG_PATH}/device.json", symbolize_names: true)
-    @device.transform_values! {|val| val.is_a?(String) ? val.to_sym : val }
-    # Ok to remove backup and temporary json files.
-    FileUtils.rm_f "#{CREW_CONFIG_PATH}/device.json.bak"
-    FileUtils.rm_f "#{CREW_CONFIG_PATH}/device.json.new"
+    save_json(@device)
+    puts "#{pkg[:pkg_name].capitalize} renamed to #{pkg[:pkg_rename].capitalize}".lightgreen
   end
 
   # Deprecated package deletion.
