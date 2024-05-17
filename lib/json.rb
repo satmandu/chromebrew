@@ -23,6 +23,5 @@ def save_json(json_object)
   system "ls -aFl /usr/local/etc/crew/"
   # crewlog "Deleting tmp device.json from #{tmp_json_path}..."
   # FileUtils.rm(tmp_json_path)
-  json_object = JSON.load_file(json_path, symbolize_names: true)
-  json_object.transform_values! {|val| val.is_a?(String) ? val.to_sym : val }
+  load_json
 end

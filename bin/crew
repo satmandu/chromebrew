@@ -117,13 +117,13 @@ at_exit do
   ExitMessage.print
 end
 
-def load_json(json_object)
+def load_json
   # load_json(): (re)load device.json
   json_path = File.join(CREW_CONFIG_PATH, 'device.json')
-  json_object = JSON.load_file(json_path, symbolize_names: true)
+  @device = JSON.load_file(json_path, symbolize_names: true)
 
   # symbolize also values
-  json_object.transform_values! {|val| val.is_a?(String) ? val.to_sym : val }
+  @device.transform_values! {|val| val.is_a?(String) ? val.to_sym : val }
 end
 
 def print_package(pkg_path, extra = false)
@@ -1901,7 +1901,7 @@ end
 
 puts 'before end load_json'
 system "ls -aFl /usr/local/etc/crew/"
-load_json(@device)
+load_json
 puts 'after end load_json'
 system "ls -aFl /usr/local/etc/crew/"
 command_name = args.select { |k, v| v && command?(k) }.keys[0]
