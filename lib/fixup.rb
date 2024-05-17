@@ -69,7 +69,8 @@ pkg_update_arr = [
 
 pkg_update_arr.each do |pkg|
   @device = load_json(@device)
-  puts @device.inspect
+  # puts @device.inspect
+  puts @device[:installed_packages]
   next unless @device[:installed_packages].any? { |elem| elem[:name] == pkg[:pkg_name] }
 
   puts "\n#{pkg[:pkg_name].capitalize} found in package fixup list".lightcyan
