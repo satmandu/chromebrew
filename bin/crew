@@ -1892,7 +1892,7 @@ end
 
 # puts 'before end load_json'
 # system "ls -aFl /usr/local/etc/crew/"
-load_json(@device)
+@device = load_json(@device)
 # puts 'after end load_json'
 # system "ls -aFl /usr/local/etc/crew/"
 command_name = args.select { |k, v| v && command?(k) }.keys[0]
