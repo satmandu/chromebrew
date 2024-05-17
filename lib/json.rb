@@ -27,7 +27,7 @@ def save_json(json_object)
   crewlog "The device.json changes are:"
   crewlog `diff -Npaur #{json_path} #{tmp_json_path}`.chomp
   FileUtils.cp(tmp_json_path, json_path)
-  crewlog "Deleting tmp device.json from #{tmp_json_path}..."
-  FileUtils.rm(tmp_json_path)
+  # crewlog "Deleting tmp device.json from #{tmp_json_path}..."
+  # FileUtils.rm(tmp_json_path)
   load_json
 end
