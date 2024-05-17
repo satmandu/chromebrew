@@ -22,7 +22,6 @@ end
 # Rename the binary_sha256 variable to sha256 in the device.json file
 if `grep -q binary_sha256 #{File.join(CREW_CONFIG_PATH, 'device.json')}`
   system(" sed -i 's/binary_sha256/sha256/g' #{File.join(CREW_CONFIG_PATH, 'device.json')}")
-  load_json(@device)
 end
 # Check for renamed and deprecated packages, and handle them.
 
@@ -69,6 +68,7 @@ pkg_update_arr = [
 ]
 
 pkg_update_arr.each do |pkg|
+  load_json(@device)
   next unless @device[:installed_packages].any? { |elem| elem[:name] == pkg[:pkg_name] }
 
   puts "\n#{pkg[:pkg_name].capitalize} found in package fixup list".lightcyan
