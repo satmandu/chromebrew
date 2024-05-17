@@ -115,14 +115,15 @@ pkg_update_arr.each do |pkg|
   next if pkg[:pkg_deprecated].to_s.empty?
   puts "#{pkg[:pkg_name].capitalize} is deprecated and should be removed.".lightpurple
   puts "#{pkg[:pkg_name].capitalize}: #{pkg[:comments]}".lightpurple unless pkg[:comments].to_s.empty?
-  print "\nWould you like to remove deprecated package #{pkg[:pkg_name].capitalize}? [y/N] "
-  pkg_remove = 0
-  case $stdin.gets.chomp.downcase
-  when 'y', 'yes'
-    pkg_remove = 1
+  unless CREW_YES
+    print "\nWould you like to remove deprecated package #{pkg[:pkg_name].capitalize}? [y/N] "
+    pkg_remove = 0
+    case $stdin.gets.chomp.downcase
+    when 'y', 'yes'
+      pkg_remove = 1
+    end
   end
-  pkg_remove = 1 if CREW_YES
-  if pkg_remove == 1
+  if pkg_remove == 1 || CREW_YES
     # Create a minimal Package object and pass it to Command.remove
     pkg_object = Package
     pkg_object.instance_eval do
