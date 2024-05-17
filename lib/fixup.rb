@@ -73,7 +73,7 @@ pkg_update_arr.each do |pkg|
     @device = JSON.load_file(File.join(CREW_CONFIG_PATH, 'device.json'))
     puts "try 2: @device is #{@device.class}"
   end
-  next unless @device['installed_packages'].any? { |elem| elem[:name] == pkg[:pkg_name] }
+  next unless @device[:installed_packages].any? { |elem| elem[:name] == pkg[:pkg_name] }
 
   puts "\n#{pkg[:pkg_name].capitalize} found in package fixup list".lightcyan
 
