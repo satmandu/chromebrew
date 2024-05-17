@@ -4,12 +4,9 @@ require_relative 'const'
 require_relative 'crewlog'
 
 def load_json(json_object)
-  # load_json(): (re)load device.json
+  # load_json(): (re)load device.json & symbolize values
   json_path = File.join(CREW_CONFIG_PATH, 'device.json')
   json_object = JSON.load_file(json_path, symbolize_names: true).transform_values! {|val| val.is_a?(String) ? val.to_sym : val }
-
-  # symbolize also values
-  # json_object.transform_values! {|val| val.is_a?(String) ? val.to_sym : val }
 end
 
 def save_json(json_object)
