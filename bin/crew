@@ -1756,6 +1756,7 @@ def install_command(args)
     # Exit early if package is already installed. This prevents the
     # postinstall from being run for an already installed package.
     @device = load_json(@device)
+    puts "@device is #{@device.class}"
     if @device[:installed_packages].any? { |pkg| pkg[:name] == @pkg_name }
       puts "Package #{@pkg_name} already installed, skipping...".lightgreen
       next
