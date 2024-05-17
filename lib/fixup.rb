@@ -69,7 +69,7 @@ pkg_update_arr = [
 pkg_update_arr.each do |pkg|
   @device = load_json(@device) rescue load_json
   puts "@device is #{@device.class}"
-  if @device.class == nil
+  if @device.class == 'NilClass'
     load_json(@device)
     puts "try 2: @device is #{@device.class}"
   end
