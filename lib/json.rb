@@ -3,17 +3,6 @@ require 'json'
 require_relative 'const'
 require_relative 'crewlog'
 
-def load_json(json_object)
-  # load_json(): (re)load device.json
-  json_path = File.join(CREW_CONFIG_PATH, 'device.json')
-  system "ls -aFl /usr/local/etc/crew/"
-  json_object = JSON.load_file(json_path, symbolize_names: true)
-
-  # symbolize also values
-  json_object.transform_values! {|val| val.is_a?(String) ? val.to_sym : val }
-  system "ls -aFl /usr/local/etc/crew/"
-end
-
 def save_json(json_object)
   json_path = File.join(CREW_CONFIG_PATH, 'device.json')
   tmp_json_path = File.join(CREW_CONFIG_PATH, 'device.json.tmp')
