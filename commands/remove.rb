@@ -9,8 +9,6 @@ class Command
     # device_json = JSON.load_file(File.join(CREW_CONFIG_PATH, 'device.json'))
     device_json = load_json(device_json)
     puts device_json.class
-    puts "now with JSON"
-    puts JSON[device_json].class
 
     # Make sure the package is actually installed before we attempt to remove it.
     unless PackageUtils.installed?(pkg.name)
@@ -60,7 +58,7 @@ class Command
 
     # Remove the package from the list of installed packages in device.json.
     puts "Removing package #{pkg.name} from device.json".yellow if verbose
-    device_json[:installed_packages].delete_if { |entry| entry['name'] == pkg.name }
+    device_json[:installed_packages].delete_if { |elem| elem[:name] == pkg[:pkg.name] }
 
     # Update device.json with our changes.
     save_json(device_json)
