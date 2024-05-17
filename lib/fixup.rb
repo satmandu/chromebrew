@@ -70,7 +70,7 @@ pkg_update_arr.each do |pkg|
   @device = load_json(@device) rescue load_json
   puts "@device is #{@device.class}"
   if @device.class.to_s == 'NilClass'
-    load_json(@device)
+    @device = JSON.load_file(File.join(CREW_CONFIG_PATH, 'device.json'))
     puts "try 2: @device is #{@device.class}"
   end
   next unless @device[:installed_packages].any? { |elem| elem[:name] == pkg[:pkg_name] }
