@@ -59,6 +59,7 @@ class Command
     # Remove the package from the list of installed packages in device.json.
     puts "Removing package #{pkg.name} from device.json".yellow if verbose
     pkg_name = pkg.name.to_s
+    puts pkg_name.class
     if device_json[:installed_packages].any? { |elem| elem[:name] == pkg[:pkg_name] }
       puts "#{pkg.name} is installed."
     end
