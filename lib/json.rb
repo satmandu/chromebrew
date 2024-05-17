@@ -7,6 +7,7 @@ def load_json(json_object)
   # load_json(): (re)load device.json
   json_path = File.join(CREW_CONFIG_PATH, 'device.json')
   json_object = JSON.load_file(json_path, symbolize_names: true)
+  puts "json_object (before transform) is #{json_object.class}"
 
   # symbolize also values
   json_object.transform_values! {|val| val.is_a?(String) ? val.to_sym : val }
