@@ -20,8 +20,10 @@ Dir.chdir CREW_LIB_PATH do
 end
 
 # Rename the binary_sha256 variable to sha256 in the device.json file
-system(" sed -i 's/binary_sha256/sha256/g' #{File.join(CREW_CONFIG_PATH, 'device.json')}") && load_json
-
+if `grep -q binary_sha256 #{File.join(CREW_CONFIG_PATH, 'device.json')}`
+  system(" sed -i 's/binary_sha256/sha256/g' #{File.join(CREW_CONFIG_PATH, 'device.json')}")
+  load_json(@device)
+end
 # Check for renamed and deprecated packages, and handle them.
 
 pkg_update_arr = [
