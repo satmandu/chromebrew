@@ -181,12 +181,12 @@ def generate_compatible
     rescue StandardError => e
       puts "Error with #{pkg_name}.rb: #{e}".red unless e.to_s.include?('uninitialized constant')
     end
-    puts "Checking #{pkg_name} for compatibility.".orange if CREW_VERBOSE
+    puts "Checking #{pkg_name} for compatibility.".orange if CREW_VERY_VERBOSE
     if PackageUtils.compatible?(@pkg)
       # add to compatible packages
-      puts "Adding #{pkg_name} #{@pkg.version} to compatible packages.".lightgreen if CREW_VERBOSE
+      puts "Adding #{pkg_name} #{@pkg.version} to compatible packages.".lightgreen if CREW_VERY_VERBOSE
       @device[:compatible_packages].push(name: @pkg.name)
-    elsif CREW_VERBOSE
+    elsif CREW_VERY_VERBOSE
       puts "#{pkg_name} is not a compatible package.".lightred
     end
   end
