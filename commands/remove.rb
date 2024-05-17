@@ -28,26 +28,30 @@ class Command
     unless pkg.is_fake?
       Dir.chdir CREW_CONFIG_PATH do
         # Remove all files installed by the package.
-        File.foreach(File.join(CREW_META_PATH, "#{pkg.name}.filelist"), chomp: true) do |line|
-          next unless line.start_with?(CREW_PREFIX)
-          if system("grep --exclude #{pkg.name}.filelist -Fxq '#{line}' ./meta/*.filelist")
-            puts "#{line} is in another package. It will not be removed during the removal of #{pkg.name}.".orange
-          else
-            puts "Removing file #{line}".yellow if verbose
-            FileUtils.remove_file line, exception: false
+        if File.file?(File.join(CREW_META_PATH, "#{pkg.name}.filelist")
+          File.foreach(File.join(CREW_META_PATH, "#{pkg.name}.filelist"), chomp: true) do |line|
+            next unless line.start_with?(CREW_PREFIX)
+            if system("grep --exclude #{pkg.name}.filelist -Fxq '#{line}' ./meta/*.filelist")
+              puts "#{line} is in another package. It will not be removed during the removal of #{pkg.name}.".orange
+            else
+              puts "Removing file #{line}".yellow if verbose
+              FileUtils.remove_file line, exception: false
+            end
           end
         end
 
         # Remove all directories installed by the package.
-        File.foreach(File.join(CREW_META_PATH, "#{pkg.name}.directorylist"), chomp: true) do |line|
-          next unless Dir.exist?(line) && Dir.empty?(line) && line.include?(CREW_PREFIX)
-          puts "Removing directory #{line}".yellow if verbose
-          FileUtils.remove_dir line, exception: false
+        if File.file?(File.join(CREW_META_PATH, "#{pkg.name}.directorylist")
+          File.foreach(File.join(CREW_META_PATH, "#{pkg.name}.directorylist"), chomp: true) do |line|
+            next unless Dir.exist?(line) && Dir.empty?(line) && line.include?(CREW_PREFIX)
+            puts "Removing directory #{line}".yellow if verbose
+            FileUtils.remove_dir line, exception: false
+          end
         end
 
         # Remove the file and directory lists.
-        FileUtils.remove_file File.join(CREW_META_PATH, "#{pkg.name}.filelist")
-        FileUtils.remove_file File.join(CREW_META_PATH, "#{pkg.name}.directorylist")
+        FileUtils.remove_file File.join(CREW_META_PATH, "#{pkg.name}.filelist") if File.file?(File.join(CREW_META_PATH, "#{pkg.name}.filelist")
+        FileUtils.remove_file File.join(CREW_META_PATH, "#{pkg.name}.directorylist") if File.file?(File.join(CREW_META_PATH, "#{pkg.name}.directorylist")
       end
     end
 
