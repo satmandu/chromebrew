@@ -68,7 +68,7 @@ pkg_update_arr = [
 ]
 
 pkg_update_arr.each do |pkg|
-  load_json
+  load_json(@device)
   next unless @device[:installed_packages].any? { |elem| elem[:name] == pkg[:pkg_name] }
 
   puts "\n#{pkg[:pkg_name].capitalize} found in package fixup list".lightcyan
@@ -117,8 +117,13 @@ pkg_update_arr.each do |pkg|
   puts "#{pkg[:pkg_name].capitalize} is deprecated and should be removed.".lightpurple
   puts "#{pkg[:pkg_name].capitalize}: #{pkg[:comments]}".lightpurple unless pkg[:comments].to_s.empty?
   print "\nWould you like to remove deprecated package #{pkg[:pkg_name].capitalize}? [y/N] "
+  pkg_remove = 0
   case $stdin.gets.chomp.downcase
   when 'y', 'yes'
+    pkg_remove = 1
+  end
+  pkg_remove = 1 if CREW_YES
+  if pkg_remove == 1
     # Create a minimal Package object and pass it to Command.remove
     pkg_object = Package
     pkg_object.instance_eval do

@@ -6,7 +6,8 @@ require_relative '../lib/package_utils'
 
 class Command
   def self.remove(pkg, verbose)
-    device_json = JSON.load_file(File.join(CREW_CONFIG_PATH, 'device.json'))
+    # device_json = JSON.load_file(File.join(CREW_CONFIG_PATH, 'device.json'))
+    load_json(device_json)
 
     # Make sure the package is actually installed before we attempt to remove it.
     unless PackageUtils.installed?(pkg.name)

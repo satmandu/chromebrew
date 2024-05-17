@@ -116,6 +116,7 @@ CREW_CACHE_BUILD        = ENV.fetch('CREW_CACHE_BUILD', '0').eql?('1')
 CREW_CACHE_FAILED_BUILD = ENV.fetch('CREW_CACHE_FAILED_BUILD', '0').eql?('1')
 
 CREW_VERBOSE = ARGV.intersect?(%w[-v --verbose])
+CREW_YES = ARGV.intersect?(%w[-y --yes])
 
 # Set CREW_NPROC from environment variable, `distcc -j`, or `nproc`.
 CREW_NPROC = \
@@ -378,6 +379,7 @@ CREW_DOCOPT = <<~DOCOPT
     -S --recursive-build     Build from source, including all dependencies, even if pre-compiled binaries exist.
     -v --verbose             Show extra information.
     -V --version             Display the crew version.
+    -y --yes                 Select Yes option whenever prompted.
     -h --help                Show this screen.
 
   version #{CREW_VERSION}

@@ -1,6 +1,7 @@
 # selector.rb: Prompt user to choose an option in a list of options
 # See packages/hunspell.rb for example usage
 require_relative 'color'
+require_relative 'const'
 require_relative 'crewlog'
 require 'io/console'
 
@@ -14,7 +15,7 @@ class Selector
     @options = options
     # Set timeout to zero if a non-interactive console.
     # Check noninteractive usage with `setsid command`.
-    @timeout = if !IO.console&.console_mode || IO.console&.winsize == [0, 0]
+    @timeout = if !IO.console&.console_mode || IO.console&.winsize == [0, 0] || CREW_YES
                  1
                else
                  timeout
