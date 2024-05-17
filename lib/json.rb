@@ -30,7 +30,7 @@ def save_json(json_object)
   crewlog `diff -Npaur #{json_path} #{tmp_json_path}`.chomp
   puts `diff -Npaur #{json_path} #{tmp_json_path}`.chomp
   system "ls -aFl /usr/local/etc/crew/"
-  FileUtils.cp(tmp_json_path, json_path)
+  FileUtils.mv(tmp_json_path, json_path)
   system "ls -aFl /usr/local/etc/crew/"
   # crewlog "Deleting tmp device.json from #{tmp_json_path}..."
   # FileUtils.rm(tmp_json_path)
