@@ -10,7 +10,6 @@ def load_json(json_object)
 
   # symbolize also values
   json_object.transform_values! {|val| val.is_a?(String) ? val.to_sym : val }
-  # puts json_object.inspect
 end
 
 def save_json(json_object)

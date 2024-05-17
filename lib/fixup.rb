@@ -1,6 +1,5 @@
 # lib/fixup.rb
 # Add fixups to be run during crew update here.
-require_relative 'json'
 
 CREW_VERBOSE = ARGV.intersect?(%w[-v --verbose]) unless defined?(CREW_VERBOSE)
 
