@@ -18,6 +18,7 @@ class Mysql < Package
 
   no_fhs
   no_compile_needed
+  no_shrink
 
   def self.install
     FileUtils.mkdir_p "#{CREW_DEST_PREFIX}/bin"
