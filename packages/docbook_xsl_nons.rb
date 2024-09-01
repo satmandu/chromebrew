@@ -6,8 +6,10 @@ class Docbook_xsl_nons < Package
   version '1.79.2-2020-06-03'
   license 'custom'
   compatibility 'all'
-  source_url 'https://github.com/docbook/xslt10-stylesheets/releases/download/snapshot/2020-06-03/docbook-xsl-nons-snapshot.zip'
-  source_sha256 'b6b10730f519c5f0125ba6349cc2bc2b9f7d9aee85f503b33b476b1c2ab29750'
+  source_url 'https://github.com/docbook/xslt10-stylesheets.git'
+  git_hashtag 'efd62655c11cc8773708df7a843613fa1e932bf8'
+  # source_url 'https://github.com/docbook/xslt10-stylesheets/releases/download/snapshot/2020-06-03/docbook-xsl-nons-snapshot.zip'
+  # source_sha256 'b6b10730f519c5f0125ba6349cc2bc2b9f7d9aee85f503b33b476b1c2ab29750'
   binary_compression 'tar.zst'
 
   binary_sha256({
@@ -17,28 +19,32 @@ class Docbook_xsl_nons < Package
      x86_64: 'b2a6e1b7f80d9e0eaa0305afc21a404fcdcbedd96f8fe0d06d3d2792c349460e'
   })
 
-  # depends_on 'ant' => :build # (If building from non-release source)
-  # depends_on 'graphicsmagick' => :build # (If building from non-release source - but note that this isn't available on i686)
+  depends_on 'ant' => :build # (If building from non-release source)
+  depends_on 'imagemagick' => :build # (If building from non-release source - but note that this isn't available on i686)
   depends_on 'docbook_xml'
   depends_on 'libxml2' => :build
+  depends_on 'libxslt' => :build
+  depends_on 'perl_xml_xpath' => :build
   depends_on 'xmlcatmgr'
 
   no_upstream_update
 
   # Patch and build are only for building from non-release snapshots.
-  # def self.patch
-  #   perl_files = `grep -rl "/usr/bin/perl" .`.chomp.split
-  #   perl_files.each do |file|
-  #     system "sed -i 's,/usr/bin/perl,/usr/bin/env perl,' #{file}"
-  #   end
-  # end
+  def self.patch
+    perl_files = `grep -rl "/usr/bin/perl" .`.chomp.split
+    perl_files.each do |file|
+      system "sed -i 's,/usr/bin/perl,/usr/bin/env perl,' #{file}"
+    end
+    downloader 'https://github.com/docbook/xslt10-stylesheets/pull/259.diff', 'hasasasas'
+    system 'patch -Np1 -i 259.diff'
+  end
 
-  # def self.build
-  #   system 'make'
-  #   system 'make check'
-  #   system 'make dist'
-  #   VERSION = `make version`.chomp
-  # end
+  def self.build
+    system 'make'
+    system 'make check'
+    system 'make dist'
+    # VERSION = `make version`.chomp
+  end
 
   def self.install
     ENV['XML_CATALOG_FILES'] = "#{CREW_DEST_PREFIX}/etc/xml/catalog"
