@@ -3,10 +3,9 @@ require 'buildsystems/meson'
 class Mpv < Meson
   description 'Video player based on MPlayer/mplayer2'
   homepage 'https://mpv.io/'
-  version '0.38.0'
+  version '0.39.0'
   license 'LGPL-2.1+, GPL-2+, BSD, ISC and GPL-3+'
   compatibility 'x86_64 aarch64 armv7l'
-  min_glibc '2.36'
   source_url 'https://github.com/mpv-player/mpv.git'
   git_hashtag "v#{version}"
   binary_compression 'tar.zst'
