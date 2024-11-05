@@ -262,6 +262,9 @@ OPT
 # Use ninja or samurai
 CREW_NINJA ||= ENV.fetch('CREW_NINJA', 'ninja') unless defined?(CREW_NINJA)
 
+CREW_BAZEL_OPTIONS ||= ''
+CREW_BAZEL_FNO_LTO_OPTIONS ||= ''
+
 # Cmake sometimes wants to use LIB_SUFFIX to install libs in LIB64, so specify such for x86_64
 # This is often considered deprecated. See discussio at https://gitlab.kitware.com/cmake/cmake/-/issues/18640
 # and also https://bugzilla.redhat.com/show_bug.cgi?id=1425064

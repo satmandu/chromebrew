@@ -9,6 +9,7 @@ class Bazel < Package
   source_url "https://github.com/bazelbuild/bazel/releases/download/#{version}/bazel-#{version}-linux-x86_64"
   source_sha256 '48ea0ff9d397a48add6369c261c5a4431fe6d5d5348cfb81411782fb80c388d3'
 
+  conflicts_ok # conflicts with bazelisk
   no_compile_needed
   no_shrink
 
