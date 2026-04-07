@@ -15,6 +15,7 @@
 
 require 'English'
 require 'fileutils'
+require 'net/http'
 
 crew_local_repo_root = `git rev-parse --show-toplevel 2> /dev/null`.chomp
 # When invoked from crew, pwd is CREW_DEST_DIR, so crew_local_repo_root
@@ -112,41 +113,29 @@ rescue Timeout::Error
   return true
 end
 
-def self.check_build_uploads(architectures_to_check, pkg)
+def self.check_build_uploads(pkg)
   return [] if pkg.is_fake?
-  architectures_to_check.delete('aarch64')
-  architectures_to_check = %w[x86_64 armv7l i686] if (architectures_to_check & %w[x86_64 armv7l i686]).nil?
 
+  architectures_to_check = pkg.compatibility == 'all' ? %w[armv7l i686 x86_64] : pkg.compatibility.split
+
+  # If we are rebuilding packages, we don't care if they already have builds uploaded to gitlab.
   return architectures_to_check if REBUILD_PACKAGES
 
-  remote_binary = { armv7l: nil, i686: nil, x86_64: nil }
-  remote_binary.keys.each do |arch|
+  # Delete every architecture that has a corresponding build already uploaded to gitlab.
+  architectures_to_check.delete_if do |arch|
     arch_specific_url = "#{CREW_GITLAB_PKG_REPO}/generic/#{pkg.name}/#{pkg.version}_#{arch}/#{pkg.name}-#{pkg.version}-chromeos-#{arch}.#{pkg.binary_compression}"
-    puts "Checking: curl -sI #{arch_specific_url}" if VERBOSE
-    remote_binary[arch.to_sym] = `curl -sI #{arch_specific_url}`.lines.first.split[1] == '200'
-    puts "#{arch_specific_url} found!" if remote_binary[arch.to_sym] && VERBOSE
-  end
-  system "crew update_package_file #{pkg.name}" unless remote_binary.values.all?(nil)
 
-  builds_needed = architectures_to_check.dup
-  architectures_to_check.each do |arch|
-    builds_needed.delete(arch) if remote_binary[arch.to_sym]
-    puts "builds_needed for #{pkg.name} is now #{builds_needed}" if VERBOSE
+    Net::HTTP.get_response(URI.parse(arch_specific_url)).code == '200'
   end
-  return builds_needed
+
+  # Return the architectures that do not have a corresponding build uploaded.
+  return architectures_to_check
 end
 
 def update_hashes_and_manifests(pkg)
   unless CREW_BUILD_NO_PACKAGE_FILE_HASH_UPDATES
-    remote_binary = { armv7l: nil, i686: nil, x86_64: nil }
-    remote_binary.keys.each do |arch|
-      arch_specific_url = "#{CREW_GITLAB_PKG_REPO}/generic/#{pkg.name}/#{pkg.version}_#{arch}/#{pkg.name}-#{pkg.version}-chromeos-#{arch}.#{pkg.binary_compression}"
-      puts "Checking: curl -sI #{arch_specific_url}" if VERBOSE
-      remote_binary[arch.to_sym] = `curl -sI #{arch_specific_url}`.lines.first.split[1] == '200'
-      puts "#{arch_specific_url} found!" if remote_binary[arch.to_sym] && VERBOSE
-    end
-    # Add build hashes.
-    system "crew update_package_file #{pkg.name}" unless remote_binary.values.all?(nil)
+    # Update/add build hashes if this package has builds.
+    system "crew update_package_file #{pkg.name}" unless pkg.no_compile_needed?
     # Add manifests if we are in the right architecture.
     if PackageUtils.compatible?(pkg)
       # Using crew reinstall -f package here updates the hashes for
@@ -353,24 +342,11 @@ updated_packages.each do |pkg|
   if !system("grep -q binary_sha256 #{pkg}") && !pkg_obj.no_compile_needed? && !pkg_obj.gem_compile_needed?
     puts "#{name.capitalize} #{pkg_obj.version} has no binaries and may not need them.".lightgreen
     next pkg
-  elsif pkg_obj.no_compile_needed? && PackageUtils.compatible?(pkg_obj)
-    # Using crew reinstall -f package here updates the hashes for
-    # binaries.
-    system "yes | crew reinstall #{'-f --regenerate-filelist' unless CREW_BUILD_NO_PACKAGE_FILE_HASH_UPDATES} #{name}"
-    # Add manifests if we are in the right architecture.
-    if system("yes | crew reinstall #{'-f --regenerate-filelist' unless CREW_BUILD_NO_PACKAGE_FILE_HASH_UPDATES} #{name}") && File.exist?("#{CREW_META_PATH}/#{name}.filelist") && File.directory?(CREW_LOCAL_REPO_ROOT)
-      puts 'Adding manifests.'
-      FileUtils.cp "#{CREW_META_PATH}/#{name}.filelist", "#{CREW_LOCAL_REPO_ROOT}/manifest/#{ARCH}/#{name.chr}/#{name}.filelist"
-    end
+  elsif pkg_obj.no_compile_needed?
+    update_hashes_and_manifests(pkg_obj)
   else
-    if pkg_obj.no_binaries_needed?
-      puts "no binaries needed for #{pkg}"
-      updated_packages.delete(pkg)
-      next
-    end
-    architectures_to_check = pkg_obj.compatibility == 'all' ? %w[x86_64 armv7l i686] : pkg_obj.compatibility.delete(',').split
     puts "#{name.capitalize} appears to need binaries. Checking to see if current binaries exist...".orange
-    builds_needed = check_build_uploads(architectures_to_check, pkg_obj)
+    builds_needed = check_build_uploads(pkg_obj)
     if builds_needed.empty?
       puts "No builds are needed for #{name} #{pkg_obj.version}.".lightgreen
       update_hashes_and_manifests(pkg_obj)
@@ -423,7 +399,7 @@ updated_packages.each do |pkg|
         abort "Failed: crew check #{name}".lightred
       end
       puts "Are builds still needed for #{name}?".orange
-      builds_still_needed = check_build_uploads(architectures_to_check, pkg_obj)
+      builds_still_needed = check_build_uploads(pkg_obj)
       puts "Built and Uploaded: #{name} for #{ARCH}" if builds_needed != builds_still_needed
       # next if builds_still_needed.empty? && system("grep -q binary_sha256 #{pkg}")
       next if builds_still_needed.empty?
