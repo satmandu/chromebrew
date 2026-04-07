@@ -5,7 +5,7 @@ class Openal < CMake
   homepage 'https://openal-soft.org/'
   version '1.25.1'
   license 'BSD'
-  compatibility 'all'
+  compatibility 'aarch64 armv7l x86_64'
   source_url 'https://github.com/kcat/openal-soft.git'
   git_hashtag version
   binary_compression 'tar.zst'
@@ -16,17 +16,16 @@ class Openal < CMake
      x86_64: '737074c8055fa50957e66e7ba4724dbef67f544b45a0a6c38342c31141e981f2'
   })
 
-  depends_on 'alsa_lib'
-  depends_on 'dbus'
-  depends_on 'gcc_lib' # R
-  depends_on 'glibc' # R
-  depends_on 'jack'
-  depends_on 'libmysofa'
+  depends_on 'alsa_lib' => :build
+  depends_on 'dbus' => :build
+  depends_on 'gcc_lib' => :library
+  depends_on 'glibc' => :library
+  depends_on 'jack' => :build
   depends_on 'libmysofa' => :executable
-  depends_on 'libsndfile'
-  depends_on 'pipewire'
-  depends_on 'portaudio'
-  depends_on 'pulseaudio'
+  depends_on 'libsndfile' => :build
+  depends_on 'pipewire' => :build
+  depends_on 'portaudio' => :build
+  depends_on 'pulseaudio' => :build
 
   cmake_options '-DALSOFT_EXAMPLES=OFF'
 end
