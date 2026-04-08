@@ -6,7 +6,7 @@ require 'buildsystems/rust'
 class Zellij < RUST
   description 'A terminal multiplexer'
   homepage 'https://zellij.dev'
-  version '0.44.0'
+  version '0.44.1'
   license 'MIT'
   compatibility 'x86_64'
   source_url 'https://github.com/zellij-org/zellij.git'
@@ -14,7 +14,7 @@ class Zellij < RUST
   binary_compression 'tar.zst'
 
   binary_sha256({
-    x86_64: 'f91f01ce832fff4f9d243b123cf94fa190754a9ee2867f4d12d3cff6aa068447'
+     x86_64: '267e04f5852cb4c078f43b4330c423356d9c2871acaa3a14484c64fb93c95fad'
   })
 
   depends_on 'gcc_lib' => :library
